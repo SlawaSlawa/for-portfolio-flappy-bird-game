@@ -35,7 +35,10 @@ scoreAudio.src = "audio/score.mp3";
 const gap = 90;
 let speed = 1;
 let changeSpeed = true;
-const gravity = 1;
+let changeScore = true;
+let isMovePipes = true;
+let gravity = 1;
+let birdJump = 20;
 
 let score = 0;
 let record = localStorage.getItem("flappy-bird-game") || 0;
@@ -60,23 +63,30 @@ function moveBirdBottom() {
 
 function moveBirdUp() {
     if (isAudio) flyAudio.play();
-    birdPosition.y -= 20;
+    birdPosition.y -= birdJump;
 }
 
 function movePipes() {
     for (let i = 0; i < pipePositions.length; i++) {
         pipePositions[i].x = pipePositions[i].x - speed;
-
-        if (pipePositions[i].x === 50) {
+        if (pipePositions[i].x < 50 && isMovePipes) {
+            isMovePipes = false;
             pipePositions.push({
                 x: canvas.width,
                 y: Math.floor(Math.random() * pipeUp.height) - pipeUp.height,
             });
         }
 
-        if (pipePositions[i].x === 10) {
+        if (pipePositions[i].x < 0 - pipeUp.width - 10) {
+            pipePositions.shift();
+            isMovePipes = true;
+            changeScore = true;
+        }
+
+        if (pipePositions[i].x < 10 && changeScore) {
             if (isAudio) scoreAudio.play();
             score++;
+            changeScore = false;
             changeSpeed = true;
         }
 
@@ -143,6 +153,8 @@ function moveGame() {
 
     if (score % 3 === 0 && score !== 0 && changeSpeed) {
         speed++;
+        gravity++;
+        birdJump += 10;
         changeSpeed = false;
     }
 
