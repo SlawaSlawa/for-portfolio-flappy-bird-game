@@ -154,7 +154,7 @@ function moveGame() {
     if (score % 3 === 0 && score !== 0 && changeSpeed) {
         speed++;
         gravity++;
-        birdJump += 10;
+        // birdJump += 10;
         changeSpeed = false;
     }
 
