@@ -141,6 +141,7 @@ function gameOver() {
     document.removeEventListener("click", moveBirdUp);
     overlayEl.classList.add("overlay--active");
     renderResultWindow();
+    restartBtn.focus();
 }
 
 function moveGame() {
